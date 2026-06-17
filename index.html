@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moritz at the Bookshop — Bingo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stock:#F1E6CB;        /* manila card stock */
+    --stock-edge:#E4D4AC;
+    --rule:#D8C49A;
+    --ink:#2B2114;          /* catalog ink */
+    --ink-soft:#6B5C44;
+    --scarlet:#B00000;      /* OSU stamp ink */
+    --scarlet-deep:#8C0000;
+    --teal:#2E6E5E;         /* "find a friend" stamp */
+    --paper:#FBF7EC;
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{margin:0;padding:0;}
+
+  body{
+    font-family:"Spectral",Georgia,serif;
+    color:var(--ink);
+    background:
+      radial-gradient(120% 120% at 50% 0%, #5d6b6a 0%, #3d4847 60%, #2c3534 100%);
+    min-height:100vh;
+    padding:28px 16px 64px;
+    display:flex;
+    justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .card{
+    width:100%;
+    max-width:760px;
+    background:var(--stock);
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(43,33,20,.045) 27px, rgba(43,33,20,.045) 28px);
+    border:1px solid var(--stock-edge);
+    box-shadow:0 1px 0 #fff inset, 0 22px 50px -18px rgba(0,0,0,.6);
+    padding:30px 30px 26px;
+    position:relative;
+  }
+  /* punched holes, like a real catalog card */
+  .card::before,.card::after{
+    content:"";position:absolute;bottom:12px;width:12px;height:12px;border-radius:50%;
+    background:radial-gradient(circle at 40% 35%, #cdbf9d, #b7a577 70%, #9c8c5f);
+    box-shadow:0 1px 1px rgba(0,0,0,.25) inset;
+  }
+  .card::before{left:50%;transform:translateX(-90px);}
+  .card::after{left:50%;transform:translateX(78px);}
+
+  /* ---- masthead ---- */
+  .rule{height:3px;background:var(--scarlet);border:none;}
+  .rule.thin{height:1px;background:var(--rule);}
+
+  .head{padding:6px 0 12px;text-align:center;}
+  .eyebrow{
+    font-family:"Special Elite",monospace;
+    letter-spacing:.34em;
+    text-transform:uppercase;
+    font-size:11px;
+    color:var(--ink-soft);
+    margin:10px 0 6px;
+  }
+  .title{
+    font-family:"Oswald",sans-serif;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.02em;
+    line-height:.95;
+    font-size:clamp(28px,6vw,46px);
+    margin:0;
+    color:var(--ink);
+  }
+  .title .b{
+    display:inline-block;
+    color:var(--scarlet);
+    letter-spacing:.22em;
+    margin-top:4px;
+    font-size:clamp(20px,4.4vw,30px);
+  }
+  .dek{
+    font-style:italic;
+    color:var(--ink-soft);
+    font-size:14px;
+    max-width:50ch;
+    margin:8px auto 0;
+  }
+
+  /* ---- legend ---- */
+  .legend{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:6px 22px;
+    font-family:"Special Elite",monospace;
+    font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--ink-soft);
+    padding:12px 0 14px;
+  }
+  .legend span{display:inline-flex;align-items:center;gap:7px;}
+  .swatch{width:11px;height:11px;border-radius:2px;display:inline-block;}
+  .sw-book{background:var(--ink);}
+  .sw-osu{background:var(--scarlet);}
+  .sw-social{background:var(--teal);}
+
+  /* ---- grid ---- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:7px;
+    background:var(--paper);
+    padding:7px;
+    border:1.5px solid var(--ink);
+  }
+
+  .cell{
+    position:relative;
+    background:var(--paper);
+    border:1px solid var(--rule);
+    border-top:3px solid var(--ink);
+    aspect-ratio:1/1;
+    padding:8px 6px 6px;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    cursor:pointer;
+    transition:background .15s ease, transform .06s ease;
+    overflow:hidden;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .cell.book{border-top-color:var(--ink);}
+  .cell.osu{border-top-color:var(--scarlet);}
+  .cell.social{border-top-color:var(--teal);}
+
+  .cell:hover{background:#fffdf6;}
+  .cell:active{transform:scale(.985);}
+  .cell:focus-visible{outline:3px solid var(--scarlet);outline-offset:-3px;}
+
+  .cell .txt{
+    font-size:11.5px;
+    line-height:1.22;
+    font-weight:500;
+    position:relative;z-index:1;
+    hyphens:auto;
+  }
+
+  /* the library-stamp mark */
+  .cell .stamp{
+    position:absolute;
+    inset:0;
+    display:flex;align-items:center;justify-content:center;
+    pointer-events:none;
+    opacity:0;transform:rotate(-12deg) scale(1.4);
+    transition:opacity .12s ease, transform .12s ease;
+    z-index:2;
+  }
+  .cell .stamp b{
+    font-family:"Special Elite",monospace;
+    font-size:15px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--scarlet);
+    border:2.5px solid var(--scarlet);
+    border-radius:5px;
+    padding:3px 8px;
+    opacity:.85;
+    box-shadow:0 0 0 2px rgba(176,0,0,.12);
+    background:rgba(251,247,236,.35);
+  }
+  .cell.marked{background:rgba(176,0,0,.07);}
+  .cell.marked .txt{opacity:.55;}
+  .cell.marked .stamp{opacity:1;transform:rotate(-9deg) scale(1);}
+  .cell.social.marked .stamp b{color:var(--teal);border-color:var(--teal);box-shadow:0 0 0 2px rgba(46,110,94,.12);}
+
+  /* the free space */
+  .cell.free{cursor:default;border-top-color:var(--scarlet);background:#fff;}
+  .cell.free:hover{background:#fff;}
+  .cell.free .free-mark{display:flex;flex-direction:column;align-items:center;gap:3px;}
+  .cell.free .seal{
+    font-family:"Special Elite",monospace;
+    color:var(--scarlet);border:2.5px solid var(--scarlet);border-radius:50%;
+    width:46px;height:46px;display:flex;align-items:center;justify-content:center;
+    font-size:11px;letter-spacing:.08em;transform:rotate(-8deg);
+    text-align:center;line-height:1;
+  }
+  .cell.free .free-cap{font-family:"Special Elite",monospace;font-size:9px;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;}
+
+  /* win banner */
+  .banner{
+    text-align:center;font-family:"Special Elite",monospace;color:var(--scarlet);
+    text-transform:uppercase;letter-spacing:.3em;font-size:15px;
+    height:0;overflow:hidden;opacity:0;transition:opacity .25s ease,height .25s ease,margin .25s ease;
+  }
+  .banner.show{height:auto;opacity:1;margin:14px 0 2px;}
+
+  /* ---- controls / footer ---- */
+  .controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:18px 0 6px;}
+  .btn{
+    font-family:"Oswald",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.1em;
+    font-size:13px;cursor:pointer;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);
+    padding:9px 18px;transition:background .15s,color .15s,transform .06s;
+  }
+  .btn:hover{background:var(--ink);color:var(--stock);}
+  .btn:active{transform:translateY(1px);}
+  .btn.primary{background:var(--scarlet);border-color:var(--scarlet);color:#fff;}
+  .btn.primary:hover{background:var(--scarlet-deep);border-color:var(--scarlet-deep);}
+  .btn:focus-visible{outline:3px solid var(--scarlet);outline-offset:2px;}
+
+  .foot{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+    margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);
+    font-family:"Special Elite",monospace;font-size:10.5px;letter-spacing:.08em;
+    color:var(--ink-soft);text-transform:uppercase;
+  }
+  .foot .gobucks{color:var(--scarlet);}
+
+  @media (max-width:560px){
+    .card{padding:22px 14px 22px;}
+    .cell .txt{font-size:9.5px;line-height:1.16;}
+    .cell{border-top-width:2.5px;padding:5px 3px;}
+    .legend{gap:5px 14px;font-size:10px;}
+    .card::before{transform:translateX(-64px);}
+    .card::after{transform:translateX(54px);}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;}
+  }
+
+  /* ---- print: one clean page, ink on white ---- */
+  @media print{
+    @page{size:letter portrait;margin:0.5in;}
+    body{background:#fff;padding:0;display:block;}
+    .card{box-shadow:none;border:none;background:#fff;background-image:none;max-width:100%;padding:0;}
+    .card::before,.card::after{display:none;}
+    .controls,.no-print{display:none!important;}
+    .rule{background:#000;}
+    .title,.title .b{color:#000;}
+    .cell.osu{border-top-color:#000;}
+    .cell.social{border-top-color:#000;}
+    .cell .stamp b{color:#000;border-color:#000;box-shadow:none;background:transparent;}
+    .cell.marked{background:#eee;}
+    .grid{border-color:#000;}
+    .cell{border-color:#999;break-inside:avoid;}
+    .foot{color:#333;}
+    .foot .gobucks{color:#000;}
+  }
+</style>
+</head>
+<body>
+<main class="card" role="application" aria-label="Bookshop bingo card">
+  <hr class="rule">
+  <div class="head">
+    <div class="eyebrow">Moritz Law Library — field trip edition</div>
+    <h1 class="title">At the Bookshop<br><span class="b">B&nbsp;I&nbsp;N&nbsp;G&nbsp;O</span></h1>
+    <p class="dek">Find it, ask about it, or stump a colleague. Five in a row — across, down, or corner to corner — wins. The center is free; so is browsing.</p>
+  </div>
+  <hr class="rule thin">
+
+  <div class="legend" aria-hidden="true">
+    <span><i class="swatch sw-book"></i> Book hunt</span>
+    <span><i class="swatch sw-osu"></i> OSU &amp; Ohio</span>
+    <span><i class="swatch sw-social"></i> Find a friend</span>
+  </div>
+
+  <div class="grid" id="grid" role="grid" aria-label="Bingo squares"></div>
+
+  <div class="banner" id="banner">★ Bingo — go claim your prize ★</div>
+
+  <div class="controls no-print">
+    <button class="btn primary" id="new">New card</button>
+    <button class="btn" id="print">Print</button>
+    <button class="btn" id="clear">Clear stamps</button>
+  </div>
+
+  <div class="foot">
+    <span>Marker no. <span id="ticket">001</span></span>
+    <span class="gobucks">Go Bucks 🌰</span>
+  </div>
+</main>
+
+<script>
+  // category: "book" (the hunt), "osu" (OSU/Ohio), "social" (talk to a colleague)
+  const POOL = [
+    // --- book hunt ---
+    {t:'A romantasy title: "A ___ of ___ and ___"', c:'book'},
+    {t:'Sprayed or painted page edges', c:'book'},
+    {t:'A faceless figure on the cover', c:'book'},
+    {t:'A one-word title', c:'book'},
+    {t:'A title that\u2019s a full sentence', c:'book'},
+    {t:'A color in the title', c:'book'},
+    {t:'A 500-page doorstopper', c:'book'},
+    {t:'A book that became a movie or show', c:'book'},
+    {t:'An animal on the cover', c:'book'},
+    {t:'A map printed inside the covers', c:'book'},
+    {t:'A "Staff Pick" shelf tag', c:'book'},
+    {t:'A book translated into English', c:'book'},
+    {t:'A pun in the title', c:'book'},
+    {t:'A subtitle longer than the title', c:'book'},
+    {t:'A signed copy', c:'book'},
+    {t:'Foil or embossing on the cover', c:'book'},
+    {t:'A book with two or more authors', c:'book'},
+    {t:'Deckled (rough-cut) edges', c:'book'},
+    {t:'Published before you were born', c:'book'},
+    {t:'"The ___\u2019s Daughter" (or Wife)', c:'book'},
+    {t:'A number in the title', c:'book'},
+    {t:'The author\u2019s name bigger than the title', c:'book'},
+    // --- OSU & Ohio ---
+    {t:'A book with "Brutus" in the title', c:'osu'},
+    {t:'A cookbook with an Ohio food: buckeye, pawpaw, sweet corn, or tomato', c:'osu'},
+    {t:'A book by an Ohio-born author (hint: Toni Morrison)', c:'osu'},
+    {t:'A book set in Ohio', c:'osu'},
+    {t:'A scarlet book and a gray book, side by side', c:'osu'},
+    {t:'A book about football', c:'osu'},
+    {t:'"Law," "Justice," or "Court" in the title', c:'osu'},
+    {t:'A book from a university press', c:'osu'},
+    {t:'A book about books, libraries, or archives', c:'osu'},
+    // --- find a friend ---
+    {t:'A colleague\u2019s favorite historical fiction', c:'social'},
+    {t:'Someone\u2019s comfort re-read \u2014 find a copy', c:'social'},
+    {t:'A book you\u2019d hand the person next to you', c:'social'},
+    {t:'Track down someone\u2019s childhood favorite', c:'social'},
+    {t:'A book that\u2019s "so [a coworker]" \u2014 tell them why', c:'social'},
+    {t:'Two people who\u2019ve read the same book', c:'social'},
+    {t:'What\u2019s someone reading now? Find it or the author', c:'social'},
+  ];
+
+  const STAMPS = ['Read','Found','Got it','Check','Yes'];
+  const grid = document.getElementById('grid');
+  const banner = document.getElementById('banner');
+  const ticketEl = document.getElementById('ticket');
+
+  function shuffle(a){
+    a = a.slice();
+    for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+    return a;
+  }
+
+  function buildCard(){
+    grid.innerHTML='';
+    banner.classList.remove('show');
+    ticketEl.textContent = String(Math.floor(Math.random()*899)+100);
+
+    const picks = shuffle(POOL).slice(0,24);
+    const cells = [];
+    for(let i=0;i<25;i++){
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.setAttribute('role','gridcell');
+
+      if(i===12){
+        cell.classList.add('free');
+        cell.setAttribute('aria-label','Free space');
+        cell.innerHTML = '<div class="free-mark"><span class="seal">FREE<br>SPACE</span><span class="free-cap">buy a book</span></div>';
+        cell.dataset.free = '1';
+        cells.push(cell); grid.appendChild(cell); continue;
+      }
+
+      const item = picks[i < 12 ? i : i-1];
+      cell.classList.add(item.c);
+      const stamp = STAMPS[Math.floor(Math.random()*STAMPS.length)];
+      cell.innerHTML =
+        '<span class="txt">'+item.t+'</span>'+
+        '<span class="stamp"><b>'+stamp+'</b></span>';
+      cell.setAttribute('tabindex','0');
+      cell.setAttribute('aria-label', item.t);
+      cell.addEventListener('click', ()=>toggle(cell));
+      cell.addEventListener('keydown', e=>{
+        if(e.key===' '||e.key==='Enter'){e.preventDefault();toggle(cell);}
+      });
+      cells.push(cell);
+      grid.appendChild(cell);
+    }
+    grid._cells = cells;
+  }
+
+  function toggle(cell){
+    cell.classList.toggle('marked');
+    cell.setAttribute('aria-pressed', cell.classList.contains('marked'));
+    checkWin();
+  }
+
+  function isOn(c){ return c.dataset.free==='1' || c.classList.contains('marked'); }
+
+  function checkWin(){
+    const c = grid._cells;
+    const idx = (r,k)=>c[r*5+k];
+    let win=false;
+    for(let r=0;r<5;r++){ if([0,1,2,3,4].every(k=>isOn(idx(r,k)))) win=true; }
+    for(let k=0;k<5;k++){ if([0,1,2,3,4].every(r=>isOn(idx(r,k)))) win=true; }
+    if([0,1,2,3,4].every(n=>isOn(idx(n,n)))) win=true;
+    if([0,1,2,3,4].every(n=>isOn(idx(n,4-n)))) win=true;
+    banner.classList.toggle('show', win);
+  }
+
+  function clearStamps(){
+    grid._cells.forEach(c=>{ if(c.dataset.free!=='1'){c.classList.remove('marked');c.setAttribute('aria-pressed','false');} });
+    banner.classList.remove('show');
+  }
+
+  document.getElementById('new').addEventListener('click', buildCard);
+  document.getElementById('clear').addEventListener('click', clearStamps);
+  document.getElementById('print').addEventListener('click', ()=>window.print());
+
+  buildCard();
+</script>
+</body>
+</html>

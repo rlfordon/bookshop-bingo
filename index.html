@@ -3,258 +3,147 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Moritz at the Bookshop — Bingo</title>
+<title>Prologue x Moritz — Bookshop Bingo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   :root{
-    --stock:#F1E6CB;        /* manila card stock */
-    --stock-edge:#E4D4AC;
-    --rule:#D8C49A;
-    --ink:#2B2114;          /* catalog ink */
-    --ink-soft:#6B5C44;
-    --scarlet:#B00000;      /* OSU stamp ink */
-    --scarlet-deep:#8C0000;
-    --teal:#2E6E5E;         /* "find a friend" stamp */
-    --paper:#FBF7EC;
+    --stock:#F1E6CB; --stock-edge:#E4D4AC; --rule:#D8C49A;
+    --ink:#2B2114; --ink-soft:#6B5C44;
+    --scarlet:#B00000; --scarlet-deep:#8C0000;
+    --teal:#2E6E5E; --paper:#FBF7EC;
   }
-
   *{box-sizing:border-box;}
-
   html,body{margin:0;padding:0;}
-
   body{
-    font-family:"Spectral",Georgia,serif;
-    color:var(--ink);
-    background:
-      radial-gradient(120% 120% at 50% 0%, #5d6b6a 0%, #3d4847 60%, #2c3534 100%);
-    min-height:100vh;
-    padding:28px 16px 64px;
-    display:flex;
-    justify-content:center;
+    font-family:"Spectral",Georgia,serif; color:var(--ink);
+    background:radial-gradient(120% 120% at 50% 0%, #5d6b6a 0%, #3d4847 60%, #2c3534 100%);
+    min-height:100vh; padding:28px 16px 64px; display:flex; justify-content:center;
     -webkit-font-smoothing:antialiased;
   }
-
   .card{
-    width:100%;
-    max-width:760px;
-    background:var(--stock);
-    background-image:
-      repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(43,33,20,.045) 27px, rgba(43,33,20,.045) 28px);
+    width:100%; max-width:780px; background:var(--stock);
+    background-image:repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(43,33,20,.045) 27px, rgba(43,33,20,.045) 28px);
     border:1px solid var(--stock-edge);
     box-shadow:0 1px 0 #fff inset, 0 22px 50px -18px rgba(0,0,0,.6);
-    padding:30px 30px 26px;
-    position:relative;
+    padding:30px 30px 26px; position:relative;
   }
-  /* punched holes, like a real catalog card */
   .card::before,.card::after{
-    content:"";position:absolute;bottom:12px;width:12px;height:12px;border-radius:50%;
+    content:""; position:absolute; bottom:12px; width:12px; height:12px; border-radius:50%;
     background:radial-gradient(circle at 40% 35%, #cdbf9d, #b7a577 70%, #9c8c5f);
     box-shadow:0 1px 1px rgba(0,0,0,.25) inset;
   }
-  .card::before{left:50%;transform:translateX(-90px);}
-  .card::after{left:50%;transform:translateX(78px);}
+  .card::before{left:50%; transform:translateX(-90px);}
+  .card::after{left:50%; transform:translateX(78px);}
 
-  /* ---- masthead ---- */
-  .rule{height:3px;background:var(--scarlet);border:none;}
-  .rule.thin{height:1px;background:var(--rule);}
+  .rule{height:3px; background:var(--scarlet); border:none;}
+  .rule.thin{height:1px; background:var(--rule);}
+  .head{padding:6px 0 12px; text-align:center;}
+  .eyebrow{font-family:"Special Elite",monospace; letter-spacing:.32em; text-transform:uppercase; font-size:11px; color:var(--ink-soft); margin:10px 0 6px;}
+  .title{font-family:"Oswald",sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.02em; line-height:.95; font-size:clamp(28px,6vw,46px); margin:0; color:var(--ink);}
+  .title .b{display:inline-block; color:var(--scarlet); letter-spacing:.22em; margin-top:4px; font-size:clamp(20px,4.4vw,30px);}
+  .dek{font-style:italic; color:var(--ink-soft); font-size:14px; max-width:54ch; margin:8px auto 0;}
 
-  .head{padding:6px 0 12px;text-align:center;}
-  .eyebrow{
-    font-family:"Special Elite",monospace;
-    letter-spacing:.34em;
-    text-transform:uppercase;
-    font-size:11px;
-    color:var(--ink-soft);
-    margin:10px 0 6px;
-  }
-  .title{
-    font-family:"Oswald",sans-serif;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:.02em;
-    line-height:.95;
-    font-size:clamp(28px,6vw,46px);
-    margin:0;
-    color:var(--ink);
-  }
-  .title .b{
-    display:inline-block;
-    color:var(--scarlet);
-    letter-spacing:.22em;
-    margin-top:4px;
-    font-size:clamp(20px,4.4vw,30px);
-  }
-  .dek{
-    font-style:italic;
-    color:var(--ink-soft);
-    font-size:14px;
-    max-width:50ch;
-    margin:8px auto 0;
-  }
+  .legend{display:flex; flex-wrap:wrap; justify-content:center; gap:6px 22px; font-family:"Special Elite",monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); padding:12px 0 14px;}
+  .legend span{display:inline-flex; align-items:center; gap:7px;}
+  .swatch{width:11px; height:11px; border-radius:2px; display:inline-block;}
+  .sw-book{background:var(--ink);} .sw-osu{background:var(--scarlet);} .sw-social{background:var(--teal);}
 
-  /* ---- legend ---- */
-  .legend{
-    display:flex;flex-wrap:wrap;justify-content:center;gap:6px 22px;
-    font-family:"Special Elite",monospace;
-    font-size:11px;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--ink-soft);
-    padding:12px 0 14px;
-  }
-  .legend span{display:inline-flex;align-items:center;gap:7px;}
-  .swatch{width:11px;height:11px;border-radius:2px;display:inline-block;}
-  .sw-book{background:var(--ink);}
-  .sw-osu{background:var(--scarlet);}
-  .sw-social{background:var(--teal);}
-
-  /* ---- grid ---- */
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:7px;
-    background:var(--paper);
-    padding:7px;
-    border:1.5px solid var(--ink);
-  }
+  .grid{display:grid; grid-template-columns:repeat(5,1fr); gap:7px; background:var(--paper); padding:7px; border:1.5px solid var(--ink);}
 
   .cell{
-    position:relative;
-    background:var(--paper);
-    border:1px solid var(--rule);
-    border-top:3px solid var(--ink);
-    aspect-ratio:1/1;
-    padding:8px 6px 6px;
-    display:flex;align-items:center;justify-content:center;text-align:center;
-    cursor:pointer;
-    transition:background .15s ease, transform .06s ease;
-    overflow:hidden;
-    -webkit-tap-highlight-color:transparent;
+    position:relative; display:flex; flex-direction:column;
+    background:var(--paper); border:1px solid var(--rule); border-top:3px solid var(--ink);
+    min-height:120px; padding:7px 7px 6px; overflow:hidden; transition:background .15s ease;
   }
   .cell.book{border-top-color:var(--ink);}
   .cell.osu{border-top-color:var(--scarlet);}
   .cell.social{border-top-color:var(--teal);}
+  .cell.marked{background:rgba(176,0,0,.06);}
 
-  .cell:hover{background:#fffdf6;}
-  .cell:active{transform:scale(.985);}
-  .cell:focus-visible{outline:3px solid var(--scarlet);outline-offset:-3px;}
+  .prompt{flex:1; display:flex; align-items:center; justify-content:center; text-align:center; cursor:pointer; padding:2px 2px 0;}
+  .prompt .txt{font-size:11.5px; line-height:1.2; font-weight:500; hyphens:auto;}
 
-  .cell .txt{
-    font-size:11.5px;
-    line-height:1.22;
-    font-weight:500;
-    position:relative;z-index:1;
-    hyphens:auto;
+  .find{margin-top:5px;}
+  .title-input,.title-static{
+    width:100%; border:none; border-bottom:1px solid rgba(43,33,20,.32);
+    background:transparent; font-family:"Special Elite",monospace; font-size:10px;
+    color:var(--scarlet-deep); padding:2px 1px; line-height:1.25;
   }
+  .title-input:focus{outline:none; border-bottom-color:var(--scarlet);}
+  .title-input::placeholder{color:var(--ink-soft); opacity:.55; font-style:italic;}
+  .title-static{min-height:17px;}
 
-  /* the library-stamp mark */
-  .cell .stamp{
-    position:absolute;
-    inset:0;
-    display:flex;align-items:center;justify-content:center;
-    pointer-events:none;
-    opacity:0;transform:rotate(-12deg) scale(1.4);
-    transition:opacity .12s ease, transform .12s ease;
-    z-index:2;
+  .mark{
+    position:absolute; top:5px; right:5px; width:21px; height:21px; border-radius:50%;
+    border:1.5px solid var(--rule); background:#fff; cursor:pointer; padding:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:"Arial",sans-serif; font-size:13px; font-weight:700; line-height:1;
+    color:transparent; transition:all .12s ease;
   }
-  .cell .stamp b{
-    font-family:"Special Elite",monospace;
-    font-size:15px;letter-spacing:.12em;text-transform:uppercase;
-    color:var(--scarlet);
-    border:2.5px solid var(--scarlet);
-    border-radius:5px;
-    padding:3px 8px;
-    opacity:.85;
-    box-shadow:0 0 0 2px rgba(176,0,0,.12);
-    background:rgba(251,247,236,.35);
-  }
-  .cell.marked{background:rgba(176,0,0,.07);}
-  .cell.marked .txt{opacity:.55;}
-  .cell.marked .stamp{opacity:1;transform:rotate(-9deg) scale(1);}
-  .cell.social.marked .stamp b{color:var(--teal);border-color:var(--teal);box-shadow:0 0 0 2px rgba(46,110,94,.12);}
+  .mark:hover{border-color:var(--ink-soft);}
+  .mark:focus-visible{outline:3px solid var(--scarlet); outline-offset:2px;}
+  .cell.marked .mark{border-color:var(--scarlet); color:var(--scarlet); transform:rotate(-9deg); box-shadow:0 0 0 2px rgba(176,0,0,.12);}
+  .cell.social.marked .mark{border-color:var(--teal); color:var(--teal); box-shadow:0 0 0 2px rgba(46,110,94,.12);}
 
-  /* the free space */
-  .cell.free{cursor:default;border-top-color:var(--scarlet);background:#fff;}
-  .cell.free:hover{background:#fff;}
-  .cell.free .free-mark{display:flex;flex-direction:column;align-items:center;gap:3px;}
-  .cell.free .seal{
-    font-family:"Special Elite",monospace;
-    color:var(--scarlet);border:2.5px solid var(--scarlet);border-radius:50%;
-    width:46px;height:46px;display:flex;align-items:center;justify-content:center;
-    font-size:11px;letter-spacing:.08em;transform:rotate(-8deg);
-    text-align:center;line-height:1;
-  }
-  .cell.free .free-cap{font-family:"Special Elite",monospace;font-size:9px;letter-spacing:.14em;color:var(--ink-soft);text-transform:uppercase;}
+  .cell.free{background:#fff; border-top-color:var(--scarlet); align-items:center; justify-content:center;}
+  .cell.free .seal{font-family:"Special Elite",monospace; color:var(--scarlet); border:2.5px solid var(--scarlet); border-radius:50%; width:50px; height:50px; display:flex; align-items:center; justify-content:center; font-size:11px; letter-spacing:.06em; transform:rotate(-8deg); text-align:center; line-height:1;}
+  .cell.free .free-cap{font-family:"Special Elite",monospace; font-size:9px; letter-spacing:.13em; color:var(--ink-soft); text-transform:uppercase; margin-top:7px;}
 
-  /* win banner */
-  .banner{
-    text-align:center;font-family:"Special Elite",monospace;color:var(--scarlet);
-    text-transform:uppercase;letter-spacing:.3em;font-size:15px;
-    height:0;overflow:hidden;opacity:0;transition:opacity .25s ease,height .25s ease,margin .25s ease;
-  }
-  .banner.show{height:auto;opacity:1;margin:14px 0 2px;}
+  .banner{text-align:center; font-family:"Special Elite",monospace; color:var(--scarlet); text-transform:uppercase; letter-spacing:.3em; font-size:15px; height:0; overflow:hidden; opacity:0; transition:opacity .25s ease,height .25s ease,margin .25s ease;}
+  .banner.show{height:auto; opacity:1; margin:14px 0 2px;}
 
-  /* ---- controls / footer ---- */
-  .controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:18px 0 6px;}
-  .btn{
-    font-family:"Oswald",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.1em;
-    font-size:13px;cursor:pointer;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);
-    padding:9px 18px;transition:background .15s,color .15s,transform .06s;
-  }
-  .btn:hover{background:var(--ink);color:var(--stock);}
+  .meta{display:flex; justify-content:center; padding-top:12px;}
+  .count{font-family:"Special Elite",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft);}
+  .count b{color:var(--scarlet);}
+
+  .controls{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; padding:14px 0 6px;}
+  .btn{font-family:"Oswald",sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:.1em; font-size:13px; cursor:pointer; border:1.5px solid var(--ink); background:var(--paper); color:var(--ink); padding:9px 18px; transition:background .15s,color .15s,transform .06s;}
+  .btn:hover{background:var(--ink); color:var(--stock);}
   .btn:active{transform:translateY(1px);}
-  .btn.primary{background:var(--scarlet);border-color:var(--scarlet);color:#fff;}
-  .btn.primary:hover{background:var(--scarlet-deep);border-color:var(--scarlet-deep);}
-  .btn:focus-visible{outline:3px solid var(--scarlet);outline-offset:2px;}
+  .btn.primary{background:var(--scarlet); border-color:var(--scarlet); color:#fff;}
+  .btn.primary:hover{background:var(--scarlet-deep); border-color:var(--scarlet-deep);}
+  .btn:focus-visible{outline:3px solid var(--scarlet); outline-offset:2px;}
 
-  .foot{
-    display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
-    margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);
-    font-family:"Special Elite",monospace;font-size:10.5px;letter-spacing:.08em;
-    color:var(--ink-soft);text-transform:uppercase;
-  }
+  .foot{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-top:14px; padding-top:12px; border-top:1px solid var(--rule); font-family:"Special Elite",monospace; font-size:10.5px; letter-spacing:.08em; color:var(--ink-soft); text-transform:uppercase;}
   .foot .gobucks{color:var(--scarlet);}
+  .hint{text-align:center; font-style:italic; font-size:11px; color:var(--ink-soft); margin:8px 0 0; opacity:.85;}
+
+  .toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--stock); font-family:"Oswald",sans-serif; font-size:13px; letter-spacing:.04em; padding:11px 20px; border-radius:3px; opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; z-index:50;}
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 
   @media (max-width:560px){
     .card{padding:22px 14px 22px;}
-    .cell .txt{font-size:9.5px;line-height:1.16;}
-    .cell{border-top-width:2.5px;padding:5px 3px;}
-    .legend{gap:5px 14px;font-size:10px;}
-    .card::before{transform:translateX(-64px);}
-    .card::after{transform:translateX(54px);}
+    .cell{min-height:104px;}
+    .prompt .txt{font-size:10px; line-height:1.15;}
+    .legend{gap:5px 14px; font-size:10px;}
+    .card::before{transform:translateX(-64px);} .card::after{transform:translateX(54px);}
   }
+  @media (prefers-reduced-motion:reduce){ *{transition:none!important;} }
 
-  @media (prefers-reduced-motion:reduce){
-    *{transition:none!important;}
-  }
-
-  /* ---- print: one clean page, ink on white ---- */
   @media print{
-    @page{size:letter portrait;margin:0.5in;}
-    body{background:#fff;padding:0;display:block;}
-    .card{box-shadow:none;border:none;background:#fff;background-image:none;max-width:100%;padding:0;}
+    @page{size:letter portrait; margin:0.4in;}
+    body{background:#fff; padding:0; display:block;}
+    .card{box-shadow:none; border:none; background:#fff; background-image:none; max-width:100%; padding:0;}
     .card::before,.card::after{display:none;}
     .controls,.no-print{display:none!important;}
-    .rule{background:#000;}
-    .title,.title .b{color:#000;}
-    .cell.osu{border-top-color:#000;}
-    .cell.social{border-top-color:#000;}
-    .cell .stamp b{color:#000;border-color:#000;box-shadow:none;background:transparent;}
-    .cell.marked{background:#eee;}
-    .grid{border-color:#000;}
-    .cell{border-color:#999;break-inside:avoid;}
-    .foot{color:#333;}
-    .foot .gobucks{color:#000;}
+    .rule{background:#000;} .title,.title .b{color:#000;}
+    .cell.osu,.cell.social{border-top-color:#000;}
+    .mark{border-color:#999;} .cell.marked .mark{color:#000; border-color:#000; box-shadow:none;}
+    .title-input{color:#000;}
+    .grid{border-color:#000;} .cell{border-color:#999; break-inside:avoid;}
   }
 </style>
 </head>
 <body>
-<main class="card" role="application" aria-label="Bookshop bingo card">
+<main class="card" id="card" role="application" aria-label="Bookshop bingo card">
   <hr class="rule">
   <div class="head">
-    <div class="eyebrow">Moritz Law Library — field trip edition</div>
-    <h1 class="title">At the Bookshop<br><span class="b">B&nbsp;I&nbsp;N&nbsp;G&nbsp;O</span></h1>
-    <p class="dek">Find it, ask about it, or stump a colleague. Five in a row — across, down, or corner to corner — wins. The center is free; so is browsing.</p>
+    <div class="eyebrow">Moritz Law Library at Prologue Bookshop</div>
+    <h1 class="title">Bookshop<br><span class="b">B&nbsp;I&nbsp;N&nbsp;G&nbsp;O</span></h1>
+    <p class="dek">Find a book that fits the square, jot the title on the line, and check it off. Five in a row — across, down, or corner to corner — wins. Center is free; so is browsing.</p>
   </div>
   <hr class="rule thin">
 
@@ -266,13 +155,17 @@
 
   <div class="grid" id="grid" role="grid" aria-label="Bingo squares"></div>
 
-  <div class="banner" id="banner">★ Bingo — go claim your prize ★</div>
+  <div class="banner" id="banner">★ Bingo — go show someone ★</div>
+
+  <div class="meta"><span class="count" id="count"><b>0</b> / 24 found</span></div>
 
   <div class="controls no-print">
-    <button class="btn primary" id="new">New card</button>
+    <button class="btn primary" id="export">Export image</button>
+    <button class="btn" id="new">New card</button>
     <button class="btn" id="print">Print</button>
-    <button class="btn" id="clear">Clear stamps</button>
+    <button class="btn" id="clear">Clear card</button>
   </div>
+  <p class="hint no-print">Export grabs the whole card as one image. On a phone, a screenshot works too — just scroll so every row is in frame.</p>
 
   <div class="foot">
     <span>Marker no. <span id="ticket">001</span></span>
@@ -280,113 +173,115 @@
   </div>
 </main>
 
+<div class="toast" id="toast"></div>
+
 <script>
-  // category: "book" (the hunt), "osu" (OSU/Ohio), "social" (talk to a colleague)
   const POOL = [
     // --- book hunt ---
     {t:'A romantasy title: "A ___ of ___ and ___"', c:'book'},
     {t:'Sprayed or painted page edges', c:'book'},
-    {t:'A faceless figure on the cover', c:'book'},
+    {t:'A face hidden or cut off on the cover', c:'book'},
     {t:'A one-word title', c:'book'},
-    {t:'A title that\u2019s a full sentence', c:'book'},
+    {t:'A title that\u2019s a complete sentence', c:'book'},
     {t:'A color in the title', c:'book'},
-    {t:'A 500-page doorstopper', c:'book'},
-    {t:'A book that became a movie or show', c:'book'},
+    {t:'A book over 500 pages', c:'book'},
+    {t:'A "now a movie or show" tie-in', c:'book'},
     {t:'An animal on the cover', c:'book'},
-    {t:'A map printed inside the covers', c:'book'},
-    {t:'A "Staff Pick" shelf tag', c:'book'},
+    {t:'A map printed inside', c:'book'},
+    {t:'A "Staff Pick" tag', c:'book'},
     {t:'A book translated into English', c:'book'},
     {t:'A pun in the title', c:'book'},
     {t:'A subtitle longer than the title', c:'book'},
     {t:'A signed copy', c:'book'},
-    {t:'Foil or embossing on the cover', c:'book'},
+    {t:'Foil or shiny lettering on the cover', c:'book'},
     {t:'A book with two or more authors', c:'book'},
-    {t:'Deckled (rough-cut) edges', c:'book'},
-    {t:'Published before you were born', c:'book'},
-    {t:'"The ___\u2019s Daughter" (or Wife)', c:'book'},
+    {t:'Rough-cut (deckled) edges', c:'book'},
+    {t:'"The ___\u2019s Daughter" (or "Wife")', c:'book'},
     {t:'A number in the title', c:'book'},
     {t:'The author\u2019s name bigger than the title', c:'book'},
+    {t:'A title that\u2019s a question', c:'book'},
+    {t:'A cover pretty enough to frame', c:'book'},
+    {t:'A celebrity book club sticker (Reese\u2019s, Oprah, Jenna)', c:'book'},
+    {t:'Food on the cover', c:'book'},
+    {t:'A cartoon couple on the cover', c:'book'},
+    {t:'A book you\u2019ve been meaning to read', c:'book'},
+    {t:'A book you were assigned in school', c:'book'},
     // --- OSU & Ohio ---
-    {t:'A book with "Brutus" in the title', c:'osu'},
-    {t:'A cookbook with an Ohio food: buckeye, pawpaw, sweet corn, or tomato', c:'osu'},
-    {t:'A book by an Ohio-born author (hint: Toni Morrison)', c:'osu'},
-    {t:'A book set in Ohio', c:'osu'},
-    {t:'A scarlet book and a gray book, side by side', c:'osu'},
-    {t:'A book about football', c:'osu'},
-    {t:'"Law," "Justice," or "Court" in the title', c:'osu'},
-    {t:'A book from a university press', c:'osu'},
+    {t:'A book by an Ohio author (Morrison, Thurber, Abdurraqib)', c:'osu'},
+    {t:'Two books side by side \u2014 one scarlet, one gray', c:'osu'},
+    {t:'"Law," "Justice," "Court," or "Trial" in the title', c:'osu'},
     {t:'A book about books, libraries, or archives', c:'osu'},
+    {t:'A book from a university press', c:'osu'},
+    {t:'A cookbook with something you\u2019d cook this week', c:'osu'},
+    {t:'A book about sports', c:'osu'},
     // --- find a friend ---
     {t:'A colleague\u2019s favorite historical fiction', c:'social'},
-    {t:'Someone\u2019s comfort re-read \u2014 find a copy', c:'social'},
+    {t:'Someone\u2019s comfort re-read', c:'social'},
     {t:'A book you\u2019d hand the person next to you', c:'social'},
-    {t:'Track down someone\u2019s childhood favorite', c:'social'},
-    {t:'A book that\u2019s "so [a coworker]" \u2014 tell them why', c:'social'},
-    {t:'Two people who\u2019ve read the same book', c:'social'},
-    {t:'What\u2019s someone reading now? Find it or the author', c:'social'},
+    {t:'Someone\u2019s childhood favorite', c:'social'},
+    {t:'A book that\u2019s "so [a coworker]"', c:'social'},
+    {t:'A book two of you have both read', c:'social'},
+    {t:'What someone\u2019s reading right now', c:'social'},
   ];
 
-  const STAMPS = ['Read','Found','Got it','Check','Yes'];
   const grid = document.getElementById('grid');
   const banner = document.getElementById('banner');
   const ticketEl = document.getElementById('ticket');
+  const countEl = document.getElementById('count');
+  const toastEl = document.getElementById('toast');
 
-  function shuffle(a){
-    a = a.slice();
-    for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
-    return a;
+  function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+  function toast(msg){
+    toastEl.textContent = msg; toastEl.classList.add('show');
+    clearTimeout(toastEl._t); toastEl._t = setTimeout(()=>toastEl.classList.remove('show'), 2200);
   }
 
   function buildCard(){
-    grid.innerHTML='';
-    banner.classList.remove('show');
+    grid.innerHTML=''; banner.classList.remove('show');
     ticketEl.textContent = String(Math.floor(Math.random()*899)+100);
-
     const picks = shuffle(POOL).slice(0,24);
-    const cells = [];
+    const cells=[];
     for(let i=0;i<25;i++){
-      const cell = document.createElement('div');
-      cell.className = 'cell';
-      cell.setAttribute('role','gridcell');
-
+      const cell=document.createElement('div');
+      cell.className='cell'; cell.setAttribute('role','gridcell');
       if(i===12){
-        cell.classList.add('free');
+        cell.classList.add('free'); cell.dataset.free='1';
         cell.setAttribute('aria-label','Free space');
-        cell.innerHTML = '<div class="free-mark"><span class="seal">FREE<br>SPACE</span><span class="free-cap">buy a book</span></div>';
-        cell.dataset.free = '1';
+        cell.innerHTML='<span class="seal">FREE</span><span class="free-cap">buy a book</span>';
         cells.push(cell); grid.appendChild(cell); continue;
       }
-
-      const item = picks[i < 12 ? i : i-1];
+      const item = picks[i<12 ? i : i-1];
       cell.classList.add(item.c);
-      const stamp = STAMPS[Math.floor(Math.random()*STAMPS.length)];
       cell.innerHTML =
-        '<span class="txt">'+item.t+'</span>'+
-        '<span class="stamp"><b>'+stamp+'</b></span>';
-      cell.setAttribute('tabindex','0');
-      cell.setAttribute('aria-label', item.t);
-      cell.addEventListener('click', ()=>toggle(cell));
-      cell.addEventListener('keydown', e=>{
-        if(e.key===' '||e.key==='Enter'){e.preventDefault();toggle(cell);}
-      });
-      cells.push(cell);
-      grid.appendChild(cell);
+        '<button class="mark" type="button" aria-label="Mark found">\u2713</button>'+
+        '<div class="prompt"><span class="txt"></span></div>'+
+        '<div class="find"><input class="title-input" type="text" placeholder="title\u2026" autocomplete="off"></div>';
+      cell.querySelector('.txt').textContent = item.t;
+      const input = cell.querySelector('.title-input');
+      input.setAttribute('aria-label','Title you found for: '+item.t);
+      cell.querySelector('.mark').addEventListener('click', e=>{ e.stopPropagation(); toggle(cell); });
+      cell.querySelector('.prompt').addEventListener('click', ()=>toggle(cell));
+      input.addEventListener('input', ()=>{ if(input.value.trim() && !cell.classList.contains('marked')) toggle(cell); else updateCount(); });
+      cells.push(cell); grid.appendChild(cell);
     }
-    grid._cells = cells;
+    grid._cells=cells; updateCount();
   }
 
   function toggle(cell){
     cell.classList.toggle('marked');
-    cell.setAttribute('aria-pressed', cell.classList.contains('marked'));
-    checkWin();
+    cell.querySelector('.mark').setAttribute('aria-pressed', cell.classList.contains('marked'));
+    updateCount(); checkWin();
   }
-
   function isOn(c){ return c.dataset.free==='1' || c.classList.contains('marked'); }
 
+  function updateCount(){
+    const n = grid._cells.filter(c=>c.dataset.free!=='1' && c.classList.contains('marked')).length;
+    countEl.innerHTML = '<b>'+n+'</b> / 24 found';
+  }
+
   function checkWin(){
-    const c = grid._cells;
-    const idx = (r,k)=>c[r*5+k];
-    let win=false;
+    const c=grid._cells, idx=(r,k)=>c[r*5+k]; let win=false;
     for(let r=0;r<5;r++){ if([0,1,2,3,4].every(k=>isOn(idx(r,k)))) win=true; }
     for(let k=0;k<5;k++){ if([0,1,2,3,4].every(r=>isOn(idx(r,k)))) win=true; }
     if([0,1,2,3,4].every(n=>isOn(idx(n,n)))) win=true;
@@ -394,13 +289,51 @@
     banner.classList.toggle('show', win);
   }
 
-  function clearStamps(){
-    grid._cells.forEach(c=>{ if(c.dataset.free!=='1'){c.classList.remove('marked');c.setAttribute('aria-pressed','false');} });
-    banner.classList.remove('show');
+  function clearCard(){
+    grid._cells.forEach(c=>{
+      if(c.dataset.free==='1') return;
+      c.classList.remove('marked');
+      c.querySelector('.mark').setAttribute('aria-pressed','false');
+      c.querySelector('.title-input').value='';
+    });
+    banner.classList.remove('show'); updateCount();
   }
 
+  function exportImage(){
+    if(typeof html2canvas==='undefined'){ toast('Export tool didn\u2019t load \u2014 check your connection'); return; }
+    const card=document.getElementById('card');
+    const btn=document.getElementById('export'); const prev=btn.textContent; btn.textContent='Exporting\u2026';
+    html2canvas(card,{
+      scale:2, backgroundColor:'#F1E6CB', useCORS:true,
+      onclone:(doc)=>{
+        doc.querySelectorAll('.no-print').forEach(e=>e.style.display='none');
+        doc.querySelectorAll('.title-input').forEach(inp=>{
+          const d=doc.createElement('div'); d.className='title-static'; d.textContent=inp.value||''; 
+          inp.parentNode.replaceChild(d,inp);
+        });
+      }
+    }).then(canvas=>{
+      canvas.toBlob(async (blob)=>{
+        if(!blob){ btn.textContent=prev; toast('Couldn\u2019t make the image \u2014 try a screenshot'); return; }
+        const file=new File([blob],'prologue-bingo.png',{type:'image/png'});
+        // On phones, try the native share sheet first (best experience).
+        if(navigator.canShare && navigator.canShare({files:[file]})){
+          try{ await navigator.share({files:[file], title:'Bookshop Bingo'}); btn.textContent=prev; return; }
+          catch(err){ if(err && err.name==='AbortError'){ btn.textContent=prev; return; } /* else fall back */ }
+        }
+        // Otherwise download it.
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a'); a.href=url; a.download='prologue-bingo.png';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url),1000);
+        btn.textContent=prev; toast('Saved as prologue-bingo.png');
+      },'image/png');
+    }).catch(()=>{ btn.textContent=prev; toast('Couldn\u2019t export \u2014 try a screenshot'); });
+  }
+
+  document.getElementById('export').addEventListener('click', exportImage);
   document.getElementById('new').addEventListener('click', buildCard);
-  document.getElementById('clear').addEventListener('click', clearStamps);
+  document.getElementById('clear').addEventListener('click', clearCard);
   document.getElementById('print').addEventListener('click', ()=>window.print());
 
   buildCard();
